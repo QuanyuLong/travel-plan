@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+	body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=H6Yz5pz4fFOQGKb4ROdYjPvzOakOenyv"></script>
+	<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+	<title>搜索酒店</title>
+	<script type="text/javascript">
+	//xy: 经纬度; st: 起点; end: 终点 | type: Number
+	//res: (Array<Number>): 顺序
+    function rateBuild(x,y,st = -1, ed = -1)
+    {
+        var n = x.length;
+        var res = new Array();
+        var maxdist = -1;
+        var maps =new Array();
+        for (i = 0;i <= n; i++)
+            maps[i] = new Array();
+        
+        for (i = 0; i < n; i++)
+        for (j = i; j < n; j++)
+        {
+            maps[i][j]=Math.sqrt((x[i]-x[j])*(x[i]-x[j])+(y[i]-y[j])*(y[i]-y[j]));
+            maps[j][i] = maps[i][j];
+            if (maps[i][j] > maxdist)
+                maxdist = maps[i][j];
+        }
+        
+        var resdist = 999999;
+        for (i = 0; i < n; i++)
+        {
+            if (st != -1 && i != st) continue;
+            var rate = new Array();
+            rate[0] = i;
+            var now = i;
+            var distance = 0;
+            while (rate.length < n)
+            {
+                var mindist = maxdist + 1;
+                var mini = -1;
+                for (j = 0; j < n; j++)
+                {
+                    var f = true;
+                    for (k = 0; k < rate.length; k++)
+                    {
+                        if (j == rate[k]){f = false; break;}
+                    }
+                    if (!f) continue;
+                    if (ed != -1 && j == ed && rate.length < n - 1) continue;
+                    if (maps[now][j] <= mindist)
+                    {
+                        mindist = maps[now][j];
+                        mini = j;
+                    }
+                }
+                rate[rate.length] = mini;
+                now = mini;
+                distance += mindist;
+            }
+            if (distance < resdist)
+            {
+                resdist = distance;
+                res = rate;
+            }
+            
+        }
+        return res; 
+    }
+	</script>
+	<script type="text/javascript">
+		var routePolicy = [BMAP_TRANSIT_POLICY_LEAST_TIME,BMAP_TRANSIT_POLICY_LEAST_TRANSFER,BMAP_TRANSIT_POLICY_LEAST_WALKING,BMAP_TRANSIT_POLICY_AVOID_SUBWAYS];
+
+		var route_options = {
+			onSearchComplete: function(results){
+				// 判断状态是否正确
+				if (transit.getStatus() == BMAP_STATUS_SUCCESS){
+					
+				}
+			},
+			renderOptions: {map: map},
+			policy: 0
+		};
+		
+		function find_index_from_start_list(start_list, pt) {
+			for (var i = 0; i < start_list.length; i++) {
+				if (pt == start_list[i]) {
+					return i;
+				}
+			}
+		}
+		
+		var ind = 0;
+		var route_result = [];
+		
+		//map: type BMap; start: type Point; end: type Point; policy_index: Number
+		//result: TransitRouteResult
+		function getRoute(map, start_list, end_list, policy_index = 0) {
+			var transit = new BMap.TransitRoute(map, route_options);
+			
+			route_result = [];
+			for (var i = 0; i < start_list.length; i++) {
+				route_result.push(0);
+			}
+			
+			for (var i = 0; i < start_list.length; i++) {
+				ind = i;
+				search(start_list[i],end_list[i],routePolicy[policy_index]); 
+			}
+			
+			function search(start,end,route){ 
+				transit.setPolicy(route);
+				transit.search(start,end);
+			}
+			if (transit.getStatus() == BMAP_STATUS_SUCCESS) {
+				return transit.getResults();
+			}
+		}
+		
+	</script>	
+</head>
+<body>
+	<div id="allmap" style="height:500px"></div>
+	<div>
+		<input type="text" id="new_place" />
+		<input type="button" id="add_place" value="添加" />
+		<input type="button" id="start" value="执行" />
+	</div>
+	<div id="showresult"></div>
+</body>
+</html>
+<script type="text/javascript">
+	var city_name = "上海"
+
+	var map = new BMap.Map("allmap"); 
+	map.centerAndZoom(city_name);
+
+	var places = [];
+	
+	map.addControl(new BMap.MapTypeControl({
+		mapTypes:[
+            BMAP_NORMAL_MAP,
+            BMAP_HYBRID_MAP
+        ]}));	  
+	map.setCurrentCity(city_name);
+	map.enableScrollWheelZoom(true);  
+	map.disableDragging(true);
+	map.disableKeyboard(true);
+	
+	var hotel_search_options = {
+		onSearchComplete: function(results) {
+			confirm();
+		},
+		
+		renderOptions: {map:map, panel:"showresult", selectFirstResult:true},
+	};
+	
+	var options = {
+		onSearchComplete: function(results){
+			if (localsearch.getStatus() == BMAP_STATUS_SUCCESS) {
+				var poi = results.getPoi(0);
+				var hotelsearch = new BMap.LocalSearch(poi.point, hotel_search_options);
+				hotelsearch.searchNearby("住宿",poi.point,1000, {forceLocal:true});
+			}
+		},
+		
+		renderOptions: {map:map, panel:"showresult", selectFirstResult:true},
+	};
+	
+	var localsearch = new BMap.LocalSearch(map, options);
+	
+	function run () {
+		var trip = rateBuild(places);
+		var time_consume = [];
+		
+		for (i = 1; i < trip.length; i++) {
+			var transit_result = getRoute(map, places[trip[i-1]], places[trip[i]]);
+			var description = [];
+			for (var j = 0; j < transit_result.getNumPlans(); j++) {
+				var plan = transit_result.getPlan(j);
+				description.push(plan.getDescription());
+				time_consume.push(plan.getDuration(false));
+			}
+		}
+	}
+	
+	$("#add_place").click(function () {
+		
+	});
+	
+	$("#start").click(function() {
+	
+	});
+</script>

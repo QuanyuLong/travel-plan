@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<title>批量地址</title>
+	<style type="text/css">
+		body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+		#l-map{height:300px;width:100%;}
+		#r-result{width:100%; font-size:14px;line-height:20px;}
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=H6Yz5pz4fFOQGKb4ROdYjPvzOakOenyv"></script>
+</head>
+<body>
+	<div id="l-map"></div>
+	<input id="input" type="text" />
+	<div id="r-result">
+		<input type="button" value="批量地址解析" onclick="bdGEO()" />
+		<div id="result"></div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+	// 百度地图API功能
+	var map = new BMap.Map("l-map");
+	map.centerAndZoom("上海",15);
+    //map.setCurrentCity("上海");
+    map.enableScrollWheelZoom(true);
+	var index = 0;
+	var count = 0;
+	var myGeo = new BMap.Geocoder();
+	function getInput(){
+		var userInput = document.getElementById("input").value;
+		var locations = userInput.split(' ');
+		return locations;
+	}
+	function bdGEO(){
+		locations = getInput();
+		var add = locations[index];
+		if (add){
+			geocodeSearch(add,locations);
+		}
+		index++;
+	}
+	function geocodeSearch(add,locations){
+		var points = new Array();
+		if(index < locations.length){
+			setTimeout(window.bdGEO,40);
+		}
+		myGeo.getPoint(add, function(point){
+			if (point) {
+				document.getElementById("result").innerHTML +=  count + "、" + add + ":" + point.lng + "," + point.lat + "</br>";
+				points[count] = point;
+				count ++;
+				var address = new BMap.Point(point.lng, point.lat);
+				addMarker(address,new BMap.Label(index+":"+add,{offset:new BMap.Size(20,-10)}));
+			}
+		}, "上海市");
+		return points;
+	}
+	// 编写自定义函数,创建标注
+	function addMarker(point,label){
+		var marker = new BMap.Marker(point);
+		map.addOverlay(marker);
+		marker.setLabel(label);
+	}
+</script>

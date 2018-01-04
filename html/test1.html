@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewpoint" content="initial-scale=1.0, user-scalable=no"/>
+    <style type="text/css">
+    body,html{width:100%;height:100%;overflow:hidden;margin:0}
+    #allmap{width:100%;height:500px}
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=H6Yz5pz4fFOQGKb4ROdYjPvzOakOenyv"></script>
+</head>
+<body>
+    <div id="allmap"></div>
+    <input type = "text" id = "input" />
+    <div id="r-result">
+        <input type="button" value="批量地址解析" onclick="bdGEO()" />
+        <div id="result"></div>
+    </div>
+    <script type="text/javascript">
+        var map = new BMap.Map("allmap");
+		map.centerAndZoom("上海");
+		map.addControl(new BMap.MapTypeControl({
+            mapTypes:[
+                BMAP_NORMAL_MAP,
+                BMAP_HYBRID_MAP
+            ]}));
+        map.setCurrentCity("上海");
+        map.enableScrollWheelZoom(true);
+        var index = 0;
+        var myGeo = new BMap.Geocoder();
+        function getInput(){
+            var userInput = document.getElementById("input").value;
+            var locations = userInput.split(' ');
+            return locations;
+        }
+        function dbGEO(){
+            var locations = getInput();
+            var add = locations[index];
+            geocodeSearch(add, locations);
+            index++;
+        }
+        function geocodeSearch(add, locations){
+            var lng_lat = new Array();
+            if(index < locations.length){
+                setTimeout(window.bdGEO,40);
+			}
+			myGeo.getPoint(add, function(point){
+				if (point) {
+					document.getElementById("result").innerHTML +=  index + "、" + add + ":" + point.lng + "," + point.lat + "</ br>";
+					lng_lat[index] = point.lng + "," + point.lat;
+					var address = new BMap.Point(point.lng, point.lat);
+					addMarker(address,new BMap.Label(index+":"+add,{offset:new BMap.Size(20,-10)}));
+				}
+			}, "上海市");
+			function addMarker(point,label){
+				var marker = new BMap.Marker(point);
+				map.addOverlay(marker);
+				marker.setLabel(label);
+			}
+			return lng_lat;
+		}
+    </script>
+</body>
+</html>
+
+
