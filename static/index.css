@@ -1,0 +1,36 @@
+*{
+margin:0;  //外边距为0
+padding:0; //内边距为0
+}
+a{
+text-decoration:none;  //去掉超级链接的下划线
+font-weight:bold;     //字体加粗
+}
+a:hover{
+text-decoration:underline;  //鼠标滑过时文本有下划线
+}
+ul{
+text-align:right;  //文本右对齐
+margin-top:10px;   //上外边距为10px
+}
+ul li{
+display:inline;   //一行显示
+margin-right:20px;  //右外边距20px
+   list-style-type:none;  //去掉列表的小标记
+}
+#form{
+height:200px;  //高度200px
+text-align:center;  //文本居中对齐
+line-height:200px;   //行高200px
+}
+#form form input{
+border:1px dashed #ccc;  //边框1px，虚线，颜色灰色
+width:200px;   //宽度200px
+height:25px;   //高度25px
+ }
+ #form form input.submit{
+border:1px solid #ccc;  //边框1px，实线，颜色灰色
+width:80px;   
+height:28px;
+font-weight:bold;
+ }

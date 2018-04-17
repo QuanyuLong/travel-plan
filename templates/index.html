@@ -1,0 +1,79 @@
+$def with(form)
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>自游上海</title>
+        <style type="text/css">
+            .pagetitle{
+                font-size:60px;
+                color:#BBDD11;
+                left:10px;
+                right:10px;
+                height:300px;
+                line-height:300px;
+                text-align:center;
+            }
+            .function{
+                float:left;
+                margin:10px;
+                font-size:18px;
+                text-align:center;
+            }
+            .formdiv{
+                text-align:center;
+            }
+            .table{
+                display:inline-block;
+            }
+        </style>
+        <link href="/static/css.css" rel="stylesheet" type="text/css" />
+        <link href="/static/reset.min.css" rel="stylesheet" type="text/css" />
+    </head>
+    <style>
+    body {
+        background:url("http://pic.meituba.com/uploads/allimg/2016/05/30/349.jpg");
+        background-repeat:no-repeat;
+        background-size:cover;
+    }
+    </style>
+
+
+    <body>
+    <div class = "blur">
+        <div class="pagetitle">自游上海</div>
+        <div class="formdiv">
+            <div class = "table" >
+                <div class = "function">
+                <form action="/ss" method="GET">
+                    <input type="submit" value="景点美食搜索">
+                </form>
+                </div>
+                <div class = "function">
+                <form action="/sr" methof="GET">
+                    <input type="submit" value="旅游路线规划">
+                </form>
+                </div>
+                <div class = "function">
+                <form action="/si" methof="GET">
+                    <input type="submit" value="旅游图片检索">
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="imglist1">
+        <ul class="clear">
+            <li><a href="/"><img src="/static/1.jpg" /><span>主页</span></a></li>
+            <li><a href="/"><img src="/static/2.jpg" /><span>主页</span></a></li>
+            <li><a href="/"><img src="/static/3.jpg" /><span>主页</span></a></li>
+            <li><a href="/"><img src="/static/4.jpg" /><span>主页</span></a></li>
+            <li><a href="/"><img src="/static/5.jpg" /><span>主页</span></a></li>
+            <li><a href="/"><img src="/static/6.jpg" /><span>主页</span></a></li>
+            <li><a href="/"><img src="/static/7.jpg" /><span>主页</span></a></li>
+            <li><a href="/"><img src="/static/8.jpg" /><span>主页</span></a></li>
+            <li><a href="/"><img src="/static/9.jpg" /><span>主页</span></a></li>
+            <li><a href="/"><img src="/static/10.jpg" /><span>主页</span></a></li>
+        </ul>
+    </div>
+    </body>
+    </html>

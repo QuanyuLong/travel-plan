@@ -1,0 +1,88 @@
+$def with (result_dict)
+$if result_dict:
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <meta name="referrer" content="never">
+            <title>搜索结果</title>
+            <style type = "text/css">
+                body{
+                    background:url(http://pic.qiantucdn.com/58pic/13/07/87/92s58PICQEW_1024.jpg!/fw/780/watermark/url/L3dhdGVybWFyay12MS40LnBuZw==/align/center);
+                }
+                div.img_container {
+                    margin-right:2em;
+                    margin-bottom:2em;
+                    padding:1em;
+                    float:left;
+                    width:240px;
+                    height:200px;
+                    background-color: antiquewhite;
+                    }
+                div.introduction_container {
+                    margin-right:2em;
+                    margin-bottom:2em;
+                    padding:1em;
+                    max-width:1000px;
+                    float:left;
+                    clear:both;
+                    }
+                img.result{
+                    max-width:360px;
+                    min-width:240px;
+                    max-height:300px;
+                }
+                div.container{
+                    float:left;
+                    clear:both;
+                    margin:10px;
+                    padding-bottom:20px;
+                }
+                text.location {
+                    font-size:28pt;
+                    color:navy;
+                    
+                    }
+                text.score {
+                    font-style:italic;
+                    font-size:14pt;
+                    color:teal
+                    }
+                }
+            </style>
+                
+        </head>
+        <body>
+            <div class = "container">
+                <text class = "location">
+                    $result_dict['location']
+                </text>
+                &nbsp
+                <text class = "score">
+                    score : $result_dict['score']
+                </text>
+                <br />
+                <hr />
+                <br />
+                <br />
+                <h2>
+                    Introduction
+                </h2>
+                <div class = "introduction_container">
+                    $for i in result_dict['introduction']:
+                        <p>$i</p>
+                    <hr />
+                    <br />
+                    <br />
+                </div>
+                <h2>
+                    Image
+                </h2>
+                $for img_url in result_dict['img_list']:
+                    <div class="img_container">
+                        <a href = $img_url>
+                            <img class="result" src = $img_url width = 200px >
+                        </a>
+                    </div>
+            </div>
+        </body>
+    </html>

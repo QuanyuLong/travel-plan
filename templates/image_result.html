@@ -1,0 +1,150 @@
+$def with (result_dict)
+$if result_dict:
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <meta name="referrer" content="never">
+            <title>自游上海——搜索结果</title>
+            <style type = "text/css">
+                body {
+                    background:url("http://pic.meituba.com/uploads/allimg/2016/05/30/349.jpg");
+                    background-repeat:no-repeat;
+                    background-size:cover;
+                }
+                div.head{
+                    margin-left:2em;
+                    margin-top:3em;
+                    margin-right:2em;
+                    width:100%;
+                }
+                div.introduction{
+                    display:inline-block;
+                    width:100%;
+                    margin-left:2em;
+                    margin-right:2em;
+                }
+                div.image{
+                    display:inline-block;
+                    width:100%;
+                    margin-left:2em;
+                    margin-right:2em;
+                }
+                div.introduction_container {
+                    margin-right:2em;
+                    padding:1em;
+                    max-width:2000px;
+                    float:left;
+                    clear:both;
+                    }
+                div.img_container {
+                    margin-right:2em;
+                    padding:1em;
+                    float:left;
+                    width:240px;
+                    height:200px;
+                    background-color: antiquewhite;
+                    }
+                img.result{
+                    max-width:360px;
+                    min-width:240px;
+                    max-height:300px;
+                }
+                div.container{
+                    float:left;
+                    clear:both;
+                    margin:10px;
+                    padding-bottom:20px;
+                }
+                text.location {
+                    font-size:28pt;
+                    color:navy;
+                }
+                text.score {
+                    font-style:italic;
+                    font-size:14pt;
+                    color:brown;
+                }
+            </style>
+        </head>
+        <body>
+            <div class = "container">
+                <div class="head">
+                    <text class = "location">
+                        $result_dict['location']
+                    </text>
+                    &nbsp
+                    <text class = "score">
+                        score : $result_dict['score']
+                    </text>
+                    <br />
+                    <hr />
+                    <br />
+                    <br />
+                </div>
+                <div class = "introduction">
+                    <h2>
+                        Introduction
+                    </h2>
+                    <div class = "introduction_container">
+                        $if 'introduction' in result_dict.keys():
+                            $for i in result_dict['introduction']:
+                                <p>$i</p>
+                            <hr />
+                            <br />
+                            <br />
+                    </div>
+                </div>
+                <div class = "image">
+                    <h2>
+                        Image
+                    </h2>
+                    $if 'img_list' in result_dict.keys():
+                        $for img_url in result_dict['img_list']:
+                            <div class="img_container">
+                                <a href = $img_url>
+                                    <img class="result" src = $img_url width = 200px >
+                                </a>
+                            </div>
+                </div>
+            </div>
+        </body>
+    </html>
+$else:
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <meta name="referrer" content="never">
+            <title>自游上海——搜索结果</title>
+            <style type = "text/css">
+                body {
+                    background:url("http://pic.meituba.com/uploads/allimg/2016/05/30/349.jpg");
+                    background-repeat:no-repeat;
+                    background-size:cover;
+                }
+                div.head{
+                    margin-left:2em;
+                    margin-top:3em;
+                    margin-right:2em;
+                    width:100%;
+                }
+                text.location {
+                    font-size:28pt;
+                    color:navy;
+                }
+            </style>
+        </head>
+        <body>
+            <div class = "container">
+                <div class="head">
+                    <text class = "location">
+                        NOT FOUND!换个搜索试试！
+                    </text>
+                    &nbsp
+                    <br />
+                    <hr />
+                    <br />
+                    <br />
+                </div>
+            </div>
+        </body>
+    </html>
